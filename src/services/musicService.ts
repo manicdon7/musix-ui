@@ -1,6 +1,7 @@
 
 import { Track, Album } from "@/types/music";
-import { getFeaturedAlbums, getPopularTracks, searchTracks as apiSearchTracks } from "./jamendoApiClient";
+import { getFeaturedAlbums, getPopularTracks, searchTracks as apiSearchTracks } from "./spotifyApiClient";
+import { toast } from "@/components/ui/use-toast";
 
 // Sample data for initial/fallback loading
 const sampleAlbums: Album[] = [
@@ -64,6 +65,11 @@ export const getMusicData = async (): Promise<Album[]> => {
     return albums.length > 0 ? albums : sampleAlbums;
   } catch (error) {
     console.error('Error fetching music data:', error);
+    toast({
+      title: "Unable to load Spotify data",
+      description: "Using sample data instead. Please check your API key.",
+      variant: "destructive",
+    });
     return sampleAlbums;
   }
 };
@@ -76,6 +82,11 @@ export const searchTracks = async (query: string): Promise<Track[]> => {
     return tracks;
   } catch (error) {
     console.error('Error searching tracks:', error);
+    toast({
+      title: "Search Error",
+      description: "Unable to search Spotify. Please check your API key.",
+      variant: "destructive",
+    });
     
     // Fallback to filtering local data
     const allTracks = sampleAlbums.flatMap(album => album.tracks);
