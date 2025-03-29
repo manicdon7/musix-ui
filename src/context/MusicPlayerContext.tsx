@@ -72,13 +72,26 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
     const handleEnded = () => {
       next();
     };
+    
+    const handleError = (e: Event) => {
+      console.error('Audio playback error:', e);
+      toast({
+        title: 'Playback Error',
+        description: 'Could not play this track. Trying next track if available.',
+        variant: 'destructive',
+      });
+      // Attempt to play next track
+      setTimeout(() => next(), 1000);
+    };
 
     audio.addEventListener('timeupdate', updateProgress);
     audio.addEventListener('ended', handleEnded);
+    audio.addEventListener('error', handleError);
 
     return () => {
       audio.removeEventListener('timeupdate', updateProgress);
       audio.removeEventListener('ended', handleEnded);
+      audio.removeEventListener('error', handleError);
     };
   }, []);
 
@@ -98,11 +111,23 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
         console.error('Error playing track:', error);
         toast({
           title: 'Playback Error',
-          description: 'Could not play this track. It may not be available in your region.',
+          description: 'Could not play this track. It may be region-restricted or no longer available.',
           variant: 'destructive',
         });
+        // Check if we have more tracks in queue to try playing instead
+        if (queue.length > 0) {
+          const nextTrack = queue[0];
+          setQueue(prev => prev.slice(1)); // Remove the first track from the queue
+          setTimeout(() => play(nextTrack), 500);
+        }
       });
       setIsPlaying(true);
+      
+      // Show toast notification
+      toast({
+        title: 'Now Playing',
+        description: `${track.title} by ${track.artist}`,
+      });
     }
   };
 
@@ -112,8 +137,12 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const resume = () => {
-    audioRef.current?.play();
-    setIsPlaying(true);
+    if (currentTrack && audioRef.current) {
+      audioRef.current.play().catch(error => {
+        console.error('Error resuming playback:', error);
+      });
+      setIsPlaying(true);
+    }
   };
 
   const next = () => {
@@ -132,12 +161,26 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
         const currentTrackIndex = currentAlbum.tracks.findIndex(track => track.id === currentTrack.id);
         const nextTrackIndex = (currentTrackIndex + 1) % currentAlbum.tracks.length;
         play(currentAlbum.tracks[nextTrackIndex]);
+      } else {
+        // If track isn't in any album, just play the first track from the first album as fallback
+        const allTracks = albums.flatMap(a => a.tracks);
+        const currentIndex = allTracks.findIndex(t => t.id === currentTrack.id);
+        if (currentIndex >= 0 && allTracks.length > 0) {
+          const nextIndex = (currentIndex + 1) % allTracks.length;
+          play(allTracks[nextIndex]);
+        }
       }
     }
   };
 
   const previous = () => {
     if (currentTrack) {
+      // If the current time is more than 3 seconds, just restart the track
+      if (audioRef.current && audioRef.current.currentTime > 3) {
+        audioRef.current.currentTime = 0;
+        return;
+      }
+      
       // Find the current album and track
       const currentAlbum = albums.find(album => 
         album.tracks.some(track => track.id === currentTrack.id)
@@ -147,6 +190,14 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
         const currentTrackIndex = currentAlbum.tracks.findIndex(track => track.id === currentTrack.id);
         const prevTrackIndex = (currentTrackIndex - 1 + currentAlbum.tracks.length) % currentAlbum.tracks.length;
         play(currentAlbum.tracks[prevTrackIndex]);
+      } else {
+        // If track isn't in any album, go to previous track in all tracks as fallback
+        const allTracks = albums.flatMap(a => a.tracks);
+        const currentIndex = allTracks.findIndex(t => t.id === currentTrack.id);
+        if (currentIndex >= 0 && allTracks.length > 0) {
+          const prevIndex = (currentIndex - 1 + allTracks.length) % allTracks.length;
+          play(allTracks[prevIndex]);
+        }
       }
     }
   };
@@ -176,6 +227,10 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
 
   const clearQueue = () => {
     setQueue([]);
+    toast({
+      title: 'Queue Cleared',
+      description: 'All tracks have been removed from the queue',
+    });
   };
 
   return (

@@ -6,8 +6,11 @@ import {
   SkipBack, 
   SkipForward, 
   Volume2, 
-  VolumeX 
+  VolumeX,
+  Repeat,
+  Shuffle
 } from "lucide-react";
+import { useState } from "react";
 
 const PlaybackControls = () => {
   const { 
@@ -20,6 +23,9 @@ const PlaybackControls = () => {
     setVolume, 
     currentTrack 
   } = useMusicPlayer();
+  
+  const [repeat, setRepeat] = useState(false);
+  const [shuffle, setShuffle] = useState(false);
 
   const handlePlayPause = () => {
     if (isPlaying) {
@@ -33,16 +39,27 @@ const PlaybackControls = () => {
     setVolume(parseFloat(e.target.value));
   };
 
+  const toggleRepeat = () => setRepeat(!repeat);
+  const toggleShuffle = () => setShuffle(!shuffle);
+
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="flex items-center gap-4">
+        <button 
+          className={`text-player-subtext hover:text-white transition-colors ${shuffle ? 'text-player-highlight' : ''}`}
+          onClick={toggleShuffle}
+          aria-label="Shuffle"
+        >
+          <Shuffle size={16} />
+        </button>
+        
         <button 
           className="player-button"
           onClick={previous}
           disabled={!currentTrack}
           aria-label="Previous track"
         >
-          <SkipBack size={20} />
+          <SkipBack size={18} />
         </button>
         
         <button 
@@ -51,7 +68,7 @@ const PlaybackControls = () => {
           disabled={!currentTrack}
           aria-label={isPlaying ? "Pause" : "Play"}
         >
-          {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+          {isPlaying ? <Pause size={20} /> : <Play size={20} className="ml-0.5" />}
         </button>
         
         <button 
@@ -60,13 +77,21 @@ const PlaybackControls = () => {
           disabled={!currentTrack}
           aria-label="Next track"
         >
-          <SkipForward size={20} />
+          <SkipForward size={18} />
+        </button>
+        
+        <button 
+          className={`text-player-subtext hover:text-white transition-colors ${repeat ? 'text-player-highlight' : ''}`}
+          onClick={toggleRepeat}
+          aria-label="Repeat"
+        >
+          <Repeat size={16} />
         </button>
       </div>
       
       <div className="flex items-center gap-2">
         <button 
-          className="text-player-subtext"
+          className="text-player-subtext hover:text-white transition-colors"
           onClick={() => setVolume(volume === 0 ? 0.7 : 0)}
           aria-label={volume === 0 ? "Unmute" : "Mute"}
         >
