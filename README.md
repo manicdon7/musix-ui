@@ -1,69 +1,99 @@
-# Welcome to your Lovable project
+# Musix - Modern Music Player Application
 
-## Project info
+![Musix](https://res.cloudinary.com/dvgpzftnf/image/upload/v1743258242/Screenshot_2025-03-29_195335_uddzyl.png)
 
-**URL**: https://lovable.dev/projects/7645fd37-acf4-4ade-aad2-ebd448d36caf
+## Overview
 
-## How can I edit this code?
+Musix is a modern, feature-rich music player application built with React and TypeScript. It offers a sleek UI with smooth animations, designed to provide an immersive music listening experience with a professional international theme.
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+- **Beautiful UI with Animations**: Modern design with smooth transitions and interactive elements powered by Framer Motion
+- **Multiple Pages**:
+  - **Home**: Featured albums and recently played tracks
+  - **Discover**: Explore music by genre with curated recommendations
+  - **Library**: Access your playlists and favorite albums
+  - **Album View**: Detailed album information with tracklist
+- **Music Player Controls**: Play, pause, skip tracks, and control volume
+- **Search Functionality**: Search for tracks and albums with instant results
+- **Playlist Management**: Browse and play from curated playlists
+- **Favorites System**: Save your favorite albums for easy access
+- **Responsive Design**: Works well on desktop and mobile devices
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/7645fd37-acf4-4ade-aad2-ebd448d36caf) and start prompting.
+## Technologies Used
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Vite**: Fast build tool and development server
+- **TypeScript**: Type-safe JavaScript for better development experience
+- **React**: UI library for building component-based interfaces
+- **Tailwind CSS**: Utility-first CSS framework for styling
+- **Framer Motion**: Animation library for creating fluid transitions
+- **shadcn/ui**: High-quality UI components
+- **React Router**: Navigation and routing
 
-**Use your preferred IDE**
+## Getting Started
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Prerequisites
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-Follow these steps:
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Step 1: Clone the repository
+git clone <https://github.com/manicdon7/musix-ui>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Step 2: Navigate to the project directory
+cd musix-ui
 
-# Step 3: Install the necessary dependencies.
+# Step 3: Install the necessary dependencies
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Usage
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Once the development server is running, you can access the application at `http://localhost:8080`. Navigate through the different pages to explore all features:
 
-**Use GitHub Codespaces**
+- Use the search bar to find specific songs or artists
+- Browse genres in the Discover page
+- Check out your playlists in the Library page
+- Click on albums to view their details and tracks
+- Play tracks and control playback with the player controls at the bottom
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Project Structure
 
-## What technologies are used for this project?
+- **src/components/**: Reusable UI components
+- **src/pages/**: Main application pages
+- **src/services/**: API services and music data management
+- **src/context/**: React context providers for state management
+- **src/types/**: TypeScript type definitions
+- **src/utils/**: Utility functions
 
-This project is built with .
+## Customization
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+You can customize various aspects of the application:
 
-## How can I deploy this project?
+- Edit the theme colors in `tailwind.config.ts`
+- Add or modify albums in `src/services/musicService.ts`
+- Create new playlists in the `samplePlaylists` array
+- Change icons by modifying the Lucide icon imports
 
-Simply open [Lovable](https://lovable.dev/projects/7645fd37-acf4-4ade-aad2-ebd448d36caf) and click on Share -> Publish.
+## Deployment
 
-## I want to use a custom domain - is that possible?
+To deploy this project, you can use any static site hosting service like Netlify, Vercel, or GitHub Pages.
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## Credits
+
+- Music data structure inspired by Spotify API
+- UI design influenced by modern streaming platforms
+- Sample album covers from Unsplash
+
+## License
+
+This project is available for personal and commercial use.
+
+---
+
+Created with ❤️ by https://github.com/manicdon7
