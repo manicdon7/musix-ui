@@ -4,8 +4,9 @@ import { useMusicPlayer } from "@/context/MusicPlayerContext";
 import TrackList from "./TrackList";
 import { Play, Pause } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import MusicPlayerLayout from "./MusicPlayerLayout";
 
-const AlbumView = () => {
+const AlbumContent = () => {
   const { albumId } = useParams<{ albumId: string }>();
   const { albums, play, isPlaying, currentTrack, pause, resume } = useMusicPlayer();
   
@@ -55,6 +56,15 @@ const AlbumView = () => {
       
       <TrackList album={album} />
     </div>
+  );
+};
+
+// This wrapper component ensures AlbumContent is always within MusicPlayerLayout
+const AlbumView = () => {
+  return (
+    <MusicPlayerLayout>
+      <AlbumContent />
+    </MusicPlayerLayout>
   );
 };
 
