@@ -11,10 +11,10 @@ const Index = () => {
         <div className="py-4 px-6 bg-gradient-to-b from-player-highlight/30 to-transparent">
           <h1 className="text-4xl font-bold mb-2 flex items-center gap-2">
             <Headphones size={32} className="text-player-highlight" />
-            Welcome to Music Player
+            Welcome to Musix
           </h1>
           <p className="text-player-subtext">
-            Discover and enjoy music from independent artists
+            Discover and enjoy music from Spotify
           </p>
         </div>
         

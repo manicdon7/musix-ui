@@ -88,13 +88,17 @@ const TrackList = ({ album, standalone = false }: TrackListProps) => {
               className={`group grid grid-cols-[16px_1fr_auto_auto] gap-4 py-3 px-4 hover:bg-white/5 transition-colors ${
                 isCurrentTrack ? 'text-player-highlight' : canPlay ? 'text-player-text' : 'text-player-text/60'
               }`}
+              onClick={() => canPlay && handlePlayToggle(track.id)}
             >
               <div className="flex items-center">
                 <div className="w-4 text-center">
                   {isCurrentTrack ? (
                     <span className="now-playing">
                       <button 
-                        onClick={() => handlePlayToggle(track.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePlayToggle(track.id);
+                        }}
                         className="focus:outline-none"
                       >
                         {isCurrentlyPlaying ? (
@@ -109,7 +113,10 @@ const TrackList = ({ album, standalone = false }: TrackListProps) => {
                       <span className="group-hover:hidden">{index + 1}</span>
                       {canPlay ? (
                         <button 
-                          onClick={() => handlePlayToggle(track.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePlayToggle(track.id);
+                          }}
                           className="hidden group-hover:block focus:outline-none"
                         >
                           <Play size={14} className="ml-0.5" />

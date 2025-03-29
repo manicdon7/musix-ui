@@ -41,7 +41,9 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchMusicData = async () => {
       try {
+        console.log("Fetching music data...");
         const data = await getMusicData();
+        console.log(`Loaded ${data.length} albums`);
         setAlbums(data);
         setLoading(false);
       } catch (error) {
@@ -102,6 +104,8 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
   }, [volume]);
 
   const play = (track: Track) => {
+    console.log("Attempting to play track:", track);
+    
     if (!track.previewUrl) {
       toast({
         title: 'Playback Error',
@@ -115,7 +119,9 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
     
     // Reset the audio element to ensure it loads the new track
     if (audioRef.current) {
+      console.log("Setting audio source to:", track.previewUrl);
       audioRef.current.src = track.previewUrl;
+      
       audioRef.current.play().catch(error => {
         console.error('Error playing track:', error);
         toast({
@@ -280,7 +286,7 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
-      <audio ref={audioRef} />
+      <audio ref={audioRef} preload="auto" />
     </MusicPlayerContext.Provider>
   );
 };

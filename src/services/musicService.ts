@@ -61,7 +61,9 @@ const sampleAlbums: Album[] = [
 
 export const getMusicData = async (): Promise<Album[]> => {
   try {
+    console.log("Fetching music data from Spotify...");
     const albums = await getFeaturedAlbums();
+    console.log("Fetched albums:", albums);
     return albums.length > 0 ? albums : sampleAlbums;
   } catch (error) {
     console.error('Error fetching music data:', error);
@@ -78,9 +80,12 @@ export const searchTracks = async (query: string): Promise<Track[]> => {
   if (!query) return [];
   
   try {
+    console.log("Searching for tracks:", query);
     const tracks = await apiSearchTracks(query);
     // Ensure we only return tracks that have preview URLs
-    return tracks.filter(track => track.previewUrl);
+    const tracksWithPreviews = tracks.filter(track => track.previewUrl);
+    console.log(`Found ${tracksWithPreviews.length} tracks with previews`);
+    return tracksWithPreviews;
   } catch (error) {
     console.error('Error searching tracks:', error);
     toast({

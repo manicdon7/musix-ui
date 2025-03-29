@@ -10,28 +10,68 @@ const SPOTIFY_AUTH_URL = "https://accounts.spotify.com/api/token";
 let accessToken: string | null = localStorage.getItem('spotify_access_token');
 let tokenExpiry: number = parseInt(localStorage.getItem('spotify_token_expiry') || '0');
 
-// Initialize with your token
+// Initialize with your credentials
+const CLIENT_ID = "1ecdca01c02042fe8b39ac5be6174305";
+const CLIENT_SECRET = "1653d1ba49624494ba56b370dcf0a089";
+
+// Use the provided token
 const API_TOKEN = "BQD6Efa6-_k2o1l8dmLYGNvqwUqbWLSmgnrKZbLU_V98Pyyt8YqywsyQpLIAiBn6ZtPiCoH1NyoZzd70gHalUNXR1whDm73CqW2N8NzA4SFM-yz6xdtAXbkon8md7XPXWXzFQMYfLGijwoCOqOn9ifIYxfDriHGSBg_w8c7ZbHWgfU-6iKgcA6o-gYPqLozhXcZh9dBP-4vOghJDAgyZodSdi5F0XykqlI0cwitJLs2D6bEZhGN6nf3jVmq9fh58KLDmrUwWXkdmbdEzu9Drm8M6kFWoH05-xcoFWnt2avuUxRnsHWf3Kys7166w";
 
-// Set initial token if provided
+// Set initial token
 if (API_TOKEN && !accessToken) {
   accessToken = API_TOKEN;
-  // Set expiry to 1 hour from now (typical Spotify token lifetime)
+  // Set expiry to 1 hour from now (Spotify token lifetime)
   tokenExpiry = Date.now() + 3600 * 1000;
   localStorage.setItem('spotify_access_token', accessToken);
   localStorage.setItem('spotify_token_expiry', tokenExpiry.toString());
 }
 
+// Helper function to refresh token using client credentials
+const refreshToken = async () => {
+  try {
+    const response = await fetch(SPOTIFY_AUTH_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + btoa(CLIENT_ID + ':' + CLIENT_SECRET)
+      },
+      body: 'grant_type=client_credentials'
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to refresh token');
+    }
+
+    const data = await response.json();
+    accessToken = data.access_token;
+    tokenExpiry = Date.now() + data.expires_in * 1000;
+    
+    // Store token in localStorage
+    localStorage.setItem('spotify_access_token', accessToken);
+    localStorage.setItem('spotify_token_expiry', tokenExpiry.toString());
+    
+    return accessToken;
+  } catch (error) {
+    console.error('Error refreshing token:', error);
+    throw error;
+  }
+};
+
 // Helper function for API requests
 const spotifyFetch = async (endpoint: string, options: RequestInit = {}) => {
+  // Check if token is expired
   if (!accessToken || Date.now() > tokenExpiry) {
-    // Token expired or not set
-    toast({
-      title: "Spotify Authentication Error",
-      description: "Your Spotify session has expired. Please refresh the page.",
-      variant: "destructive",
-    });
-    throw new Error("Spotify token expired or not available");
+    try {
+      // Try to refresh the token
+      await refreshToken();
+    } catch (error) {
+      toast({
+        title: "Authentication Error",
+        description: "Could not authenticate with Spotify.",
+        variant: "destructive",
+      });
+      throw new Error("Authentication failed");
+    }
   }
 
   const response = await fetch(`${SPOTIFY_API_URL}${endpoint}`, {

@@ -10,7 +10,7 @@ import {
   Repeat,
   Shuffle
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const PlaybackControls = () => {
   const { 
@@ -21,11 +21,36 @@ const PlaybackControls = () => {
     previous, 
     volume, 
     setVolume, 
-    currentTrack 
+    currentTrack,
+    audioRef
   } = useMusicPlayer();
   
   const [repeat, setRepeat] = useState(false);
   const [shuffle, setShuffle] = useState(false);
+  const [audioError, setAudioError] = useState(false);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      const handleError = () => {
+        console.error("Audio element error");
+        setAudioError(true);
+      };
+
+      const handlePlay = () => {
+        setAudioError(false);
+      };
+
+      audioRef.current.addEventListener('error', handleError);
+      audioRef.current.addEventListener('play', handlePlay);
+      
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.removeEventListener('error', handleError);
+          audioRef.current.removeEventListener('play', handlePlay);
+        }
+      };
+    }
+  }, [audioRef]);
 
   const handlePlayPause = () => {
     if (isPlaying) {
@@ -63,7 +88,7 @@ const PlaybackControls = () => {
         </button>
         
         <button 
-          className={`${currentTrack ? 'player-button-primary' : 'player-button bg-gray-700/50 cursor-not-allowed'}`}
+          className={`${currentTrack ? 'player-button-primary' : 'player-button bg-gray-700/50 cursor-not-allowed'} ${audioError ? 'bg-red-500' : ''}`}
           onClick={handlePlayPause}
           disabled={!currentTrack}
           aria-label={isPlaying ? "Pause" : "Play"}
