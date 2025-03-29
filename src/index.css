@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -104,31 +103,31 @@
 /* Music Player specific styles */
 @layer components {
   .album-shadow {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
   }
   
   .progress-bar {
-    @apply h-1 bg-player-progress rounded-full overflow-hidden cursor-pointer;
+    @apply h-1.5 bg-player-progress rounded-full overflow-hidden cursor-pointer;
   }
   
   .progress-bar-filled {
-    @apply h-full bg-player-progressFilled transition-all duration-100;
+    @apply h-full bg-gradient-to-r from-player-gradientStart to-player-gradientEnd transition-all duration-100;
   }
   
   .player-button {
-    @apply text-player-text hover:text-white transition-colors p-2 rounded-full;
+    @apply text-player-text hover:text-white transition-colors p-2.5 rounded-full hover:bg-white/5;
   }
   
   .player-button-primary {
-    @apply bg-player-highlight text-white hover:bg-opacity-80 p-3 rounded-full;
+    @apply bg-gradient-to-r from-player-gradientStart to-player-gradientEnd text-white hover:opacity-90 p-3.5 rounded-full;
   }
   
   .album-cover {
-    @apply rounded-md overflow-hidden transition-all duration-300 hover:scale-[1.02] cursor-pointer;
+    @apply rounded-md overflow-hidden transition-all duration-300 hover:scale-[1.02] cursor-pointer hover:shadow-lg;
   }
   
   .album-carousel {
-    @apply snap-x snap-mandatory flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-player-progress scrollbar-track-transparent;
+    @apply snap-x snap-mandatory flex gap-5 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-player-gradientStart scrollbar-track-transparent;
     -ms-overflow-style: none;
     scrollbar-width: thin;
   }
@@ -138,7 +137,7 @@
   }
   
   .album-carousel::-webkit-scrollbar-thumb {
-    @apply bg-player-progress rounded-full;
+    @apply bg-gradient-to-r from-player-gradientStart to-player-gradientEnd rounded-full;
   }
   
   .album-carousel::-webkit-scrollbar-track {
@@ -146,15 +145,36 @@
   }
   
   .volume-slider {
-    @apply appearance-none w-24 h-1 bg-player-progress rounded-full outline-none;
+    @apply appearance-none w-24 h-1.5 bg-player-progress rounded-full outline-none;
   }
   
   .volume-slider::-webkit-slider-thumb {
-    @apply appearance-none w-3 h-3 rounded-full bg-white cursor-pointer;
+    @apply appearance-none w-3.5 h-3.5 rounded-full bg-white cursor-pointer;
   }
   
   .volume-slider::-moz-range-thumb {
-    @apply w-3 h-3 rounded-full bg-white cursor-pointer border-none;
+    @apply w-3.5 h-3.5 rounded-full bg-white cursor-pointer border-none;
+  }
+
+  /* New utility classes */
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-player-gradientStart to-player-gradientEnd;
+  }
+
+  .glass-effect {
+    @apply backdrop-blur-md bg-white/5 border border-white/10 rounded-xl;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:bg-player-cardHover hover:scale-[1.02];
+  }
+
+  .nav-item {
+    @apply px-4 py-2 rounded-lg hover:bg-white/5 transition-colors;
+  }
+
+  .music-icon-container {
+    @apply flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-player-gradientStart to-player-gradientEnd;
   }
 }
 
@@ -165,5 +185,36 @@
 
 .now-playing::before {
   content: '';
-  @apply absolute -left-3 top-1/2 w-1.5 h-1.5 bg-player-highlight rounded-full transform -translate-y-1/2 animate-pulse-subtle;
+  @apply absolute -left-3 top-1/2 w-1.5 h-1.5 bg-gradient-to-r from-player-gradientStart to-player-gradientEnd rounded-full transform -translate-y-1/2;
+  animation: pulse-wave 2s ease-in-out infinite;
+}
+
+@keyframes pulse-wave {
+  0%, 100% { opacity: 1; transform: scale(1) translateY(-50%); }
+  50% { opacity: 0.6; transform: scale(1.2) translateY(-50%); }
+}
+
+/* Animated equalizer for playing tracks */
+.equalizer {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.equalizer-bar {
+  width: 2px;
+  background: linear-gradient(to top, #5E35B1, #2196F3);
+  border-radius: 1px;
+  animation: equalize 1.5s ease-in-out infinite;
+}
+
+.equalizer-bar:nth-child(1) { animation-delay: 0s; height: 30%; }
+.equalizer-bar:nth-child(2) { animation-delay: 0.2s; height: 80%; }
+.equalizer-bar:nth-child(3) { animation-delay: 0.4s; height: 40%; }
+.equalizer-bar:nth-child(4) { animation-delay: 0.1s; height: 60%; }
+
+@keyframes equalize {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
 }

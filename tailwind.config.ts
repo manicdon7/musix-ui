@@ -64,13 +64,17 @@ export default {
 				},
 				// Music player specific colors
 				player: {
-					background: '#121212',
-					card: '#181818',
-					highlight: '#8B5CF6', // Bright purple
+					background: '#0F0F19', // Darker background
+					card: '#1A1A2E',       // Card background
+					highlight: '#5E35B1',  // Main highlight color (rich purple)
+					highlightAlt: '#2196F3', // Secondary highlight (blue)
 					text: '#FFFFFF',
 					subtext: '#B3B3B3',
-					progress: '#535353',
-					progressFilled: '#8B5CF6'
+					progress: '#2A2A3D',
+					progressFilled: 'linear-gradient(90deg, #5E35B1, #2196F3)', // Gradient progress bar
+					gradientStart: '#5E35B1', // For gradient elements
+					gradientEnd: '#2196F3',   // For gradient elements
+					cardHover: '#232339',     // Card hover state
 				}
 			},
 			borderRadius: {

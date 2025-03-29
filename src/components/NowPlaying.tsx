@@ -1,8 +1,8 @@
-
 import { useMusicPlayer } from "@/context/MusicPlayerContext";
 import { formatTime } from "@/utils/formatTime";
-import { Heart } from "lucide-react";
+import { Heart, ExternalLink } from "lucide-react";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 const NowPlaying = () => {
   const { currentTrack, progress, isPlaying, seekTo, audioRef } = useMusicPlayer();
@@ -41,6 +41,15 @@ const NowPlaying = () => {
     seekTo(Math.max(0, Math.min(100, percentage)));
   };
 
+  const Equalizer = () => (
+    <div className="equalizer">
+      <div className="equalizer-bar"></div>
+      <div className="equalizer-bar"></div>
+      <div className="equalizer-bar"></div>
+      <div className="equalizer-bar"></div>
+    </div>
+  );
+
   if (!currentTrack) {
     return (
       <div className="flex items-center gap-4 min-w-0">
@@ -56,27 +65,69 @@ const NowPlaying = () => {
   }
 
   return (
-    <div className="flex flex-col min-w-0 w-full max-w-xs">
+    <motion.div 
+      className="flex flex-col min-w-0 w-full max-w-xs"
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className="flex items-center gap-4 mb-2 min-w-0">
-        <div className="relative group">
+        <motion.div 
+          className="relative group"
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 300, damping: 15 }}
+        >
           <img 
             src={currentTrack.albumCover}
             alt={`${currentTrack.album} by ${currentTrack.artist}`}
-            className="w-14 h-14 rounded-md flex-shrink-0 object-cover"
+            className="w-14 h-14 rounded-md flex-shrink-0 object-cover shadow-md"
           />
+          {isPlaying && (
+            <div className="absolute bottom-1 right-1">
+              <Equalizer />
+            </div>
+          )}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-md">
-            <button
+            <motion.button
               onClick={toggleFavorite}
-              className="text-white hover:text-player-highlight transition-colors"
+              className="text-white hover:text-player-highlight transition-colors mx-1"
               aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
             >
               <Heart size={16} fill={isFavorite ? 'currentColor' : 'none'} />
-            </button>
+            </motion.button>
+            
+            {currentTrack.artistId && (
+              <motion.a
+                href={`https://open.spotify.com/artist/${currentTrack.artistId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-player-highlight transition-colors mx-1"
+                aria-label="Open in Spotify"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <ExternalLink size={16} />
+              </motion.a>
+            )}
           </div>
-        </div>
+        </motion.div>
         
         <div className="min-w-0">
-          <p className="text-player-text font-medium truncate">{currentTrack.title}</p>
+          <motion.p 
+            className="text-player-text font-medium truncate"
+            animate={{ 
+              color: isPlaying ? ['#FFFFFF', '#5E35B1', '#2196F3', '#FFFFFF'] : '#FFFFFF'
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          >
+            {currentTrack.title}
+          </motion.p>
           <p className="text-player-subtext text-sm truncate">{currentTrack.artist}</p>
         </div>
       </div>
@@ -87,20 +138,28 @@ const NowPlaying = () => {
         </span>
         
         <div 
-          className="progress-bar flex-grow group"
+          className="progress-bar flex-grow group relative"
           onClick={handleSeek}
         >
           <div 
-            className="progress-bar-filled group-hover:bg-player-highlight" 
+            className="progress-bar-filled" 
             style={{ width: `${progress}%` }}
           ></div>
+          
+          {/* Animated dot on the progress bar */}
+          <motion.div
+            className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-glow opacity-0 group-hover:opacity-100"
+            style={{ left: `${progress}%`, transform: `translateX(-50%) translateY(-50%)` }}
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
         </div>
         
         <span className="text-player-subtext text-xs">
           {formatTime(currentTrack.duration)}
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

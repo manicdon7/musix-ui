@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AlbumView from "./components/AlbumView";
+import { Discover } from "./pages/Discover";
+import { Library } from "./pages/Library";
 import { useState } from "react";
 
 const App = () => {
@@ -22,6 +23,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/album/:albumId" element={<AlbumView />} />
+            <Route path="/discover" element={<Discover />} />
+            <Route path="/library" element={<Library />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

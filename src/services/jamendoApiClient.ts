@@ -1,4 +1,3 @@
-
 import { ApiResponse, Track, Album } from "@/types/music";
 
 // Use Jamendo API
