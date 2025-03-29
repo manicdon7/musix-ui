@@ -3,7 +3,7 @@ import { ApiResponse, Track, Album } from "@/types/music";
 
 // Use Jamendo API
 const JAMENDO_API_URL = "https://api.jamendo.com/v3.0";
-const CLIENT_ID = "25fb0341"; // This is a public API client ID for demo purposes
+const CLIENT_ID = "9214814"; // This is a public API client ID for demo purposes
 
 // Helper function to handle API responses
 const handleApiResponse = async (response: Response) => {
