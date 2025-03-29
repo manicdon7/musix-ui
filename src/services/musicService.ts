@@ -128,7 +128,7 @@ const sampleAlbums: Album[] = [
     id: "4",
     name: "Future Nostalgia",
     artist: "Dua Lipa",
-    coverUrl: "https://images.unsplash.com/photo-1624914023671-a5a3a3d0a2a8?w=500&h=500&fit=crop",
+    coverUrl: "https://imgs.search.brave.com/YcZ8oR9XDh4Gj8CReBSKu-ilrg6v_rqhu705fJ2w-eM/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9sYXN0/Zm0uZnJlZXRscy5m/YXN0bHkubmV0L2kv/dS81MDB4NTAwLzcw/MTdjOTRlZjc0YTQ3/NjgzOGU3NTFiMGNl/ZTFmMDE0LmpwZw",
     genre: "Pop",
     releaseDate: "2020-03-27",
     tracks: [
@@ -168,7 +168,7 @@ const sampleAlbums: Album[] = [
     id: "5",
     name: "Rumours",
     artist: "Fleetwood Mac",
-    coverUrl: "https://images.unsplash.com/photo-1614613535308-eb5fbd847f5a?w=500&h=500&fit=crop",
+    coverUrl: "https://imgs.search.brave.com/02WmrnziOTzhg3nSnXv3gbX6Lqp6MMswfeGWNumgCUQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMtbmEuc3NsLWlt/YWdlcy1hbWF6b24u/Y29tL2ltYWdlcy9J/LzgxOWFSVGVwb0pM/LmpwZw",
     genre: "Rock",
     releaseDate: "1977-02-04",
     tracks: [
@@ -208,7 +208,7 @@ const sampleAlbums: Album[] = [
     id: "6",
     name: "To Pimp a Butterfly",
     artist: "Kendrick Lamar",
-    coverUrl: "https://images.unsplash.com/photo-1558584673-c834fb1cc3d1?w=500&h=500&fit=crop",
+    coverUrl: "https://imgs.search.brave.com/mwmx1-2IHpD5PBQuRb91yXys2XSUJnZOjNf8T5eWhj0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbnRl/cnNjb3BlLmNvbS9j/ZG4vc2hvcC9wcm9k/dWN0cy9LZW5kcmlj/ay1MYW1hci1Uby1Q/aW1wLUEtQnV0dGVy/Zmx5LTJMUC1WaW55/bC5wbmc_dj0xNjkw/OTI2NDkzJndpZHRo/PTEwMDA",
     genre: "Hip-Hop",
     releaseDate: "2015-03-15",
     tracks: [
@@ -248,7 +248,7 @@ const sampleAlbums: Album[] = [
     id: "7",
     name: "Blue",
     artist: "Joni Mitchell",
-    coverUrl: "https://images.unsplash.com/photo-1614846384571-1e053edee56f?w=500&h=500&fit=crop",
+    coverUrl: "https://imgs.search.brave.com/aAQpwbdZLa4uxj5e1j7fmqH6b86cDBl1ThYcTQ2I4Zk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zb3Vy/Y2UuYm9vbXBsYXlt/dXNpYy5jb20vZ3Jv/dXAxL00wNC9EQi81/Qy9yQkVlaGw3SjJ3/ZUFhZzlrQUFFbnJt/NUpUT2c1NjYuanBn",
     genre: "Folk",
     releaseDate: "1971-06-22",
     tracks: [
