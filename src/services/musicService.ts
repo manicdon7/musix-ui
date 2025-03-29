@@ -79,7 +79,8 @@ export const searchTracks = async (query: string): Promise<Track[]> => {
   
   try {
     const tracks = await apiSearchTracks(query);
-    return tracks;
+    // Ensure we only return tracks that have preview URLs
+    return tracks.filter(track => track.previewUrl);
   } catch (error) {
     console.error('Error searching tracks:', error);
     toast({

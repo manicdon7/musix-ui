@@ -102,6 +102,15 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
   }, [volume]);
 
   const play = (track: Track) => {
+    if (!track.previewUrl) {
+      toast({
+        title: 'Playback Error',
+        description: 'This track does not have a playable preview available from Spotify.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
     setCurrentTrack(track);
     
     // Reset the audio element to ensure it loads the new track
@@ -126,7 +135,7 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
       // Show toast notification
       toast({
         title: 'Now Playing',
-        description: `${track.title} by ${track.artist}`,
+        description: `${track.title} by ${track.artist} (30s Preview)`,
       });
     }
   };
@@ -140,6 +149,11 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
     if (currentTrack && audioRef.current) {
       audioRef.current.play().catch(error => {
         console.error('Error resuming playback:', error);
+        toast({
+          title: 'Playback Error',
+          description: 'Could not resume playback. The track may no longer be available.',
+          variant: 'destructive',
+        });
       });
       setIsPlaying(true);
     }
@@ -214,6 +228,15 @@ export const MusicPlayerProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const addToQueue = (track: Track) => {
+    if (!track.previewUrl) {
+      toast({
+        title: 'Queue Error',
+        description: 'This track does not have a playable preview.',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
     setQueue(prev => [...prev, track]);
     toast({
       title: 'Added to Queue',

@@ -2,7 +2,7 @@
 import { useMusicPlayer } from "@/context/MusicPlayerContext";
 import { formatTime } from "@/utils/formatTime";
 import { Album } from "@/types/music";
-import { Play, Pause, Plus, MoreHorizontal, Heart } from "lucide-react";
+import { Play, Pause, Plus, MoreHorizontal, Heart, Volume2, VolumeX } from "lucide-react";
 import { 
   DropdownMenu, 
   DropdownMenuTrigger, 
@@ -62,6 +62,11 @@ const TrackList = ({ album, standalone = false }: TrackListProps) => {
     }
   };
 
+  const hasPreviewUrl = (trackId: string) => {
+    const track = tracks.find(t => t.id === trackId);
+    return track?.previewUrl ? true : false;
+  };
+
   return (
     <div className={`w-full ${standalone ? 'px-4' : ''}`}>
       <div className="text-player-subtext text-sm grid grid-cols-[16px_1fr_auto_auto] gap-4 py-2 px-4 border-b border-gray-700/30">
@@ -75,12 +80,13 @@ const TrackList = ({ album, standalone = false }: TrackListProps) => {
         {tracks.map((track, index) => {
           const isCurrentTrack = currentTrack?.id === track.id;
           const isCurrentlyPlaying = isCurrentTrack && isPlaying;
+          const canPlay = !!track.previewUrl;
           
           return (
             <div 
               key={track.id}
               className={`group grid grid-cols-[16px_1fr_auto_auto] gap-4 py-3 px-4 hover:bg-white/5 transition-colors ${
-                isCurrentTrack ? 'text-player-highlight' : 'text-player-text'
+                isCurrentTrack ? 'text-player-highlight' : canPlay ? 'text-player-text' : 'text-player-text/60'
               }`}
             >
               <div className="flex items-center">
@@ -101,12 +107,18 @@ const TrackList = ({ album, standalone = false }: TrackListProps) => {
                   ) : (
                     <>
                       <span className="group-hover:hidden">{index + 1}</span>
-                      <button 
-                        onClick={() => handlePlayToggle(track.id)}
-                        className="hidden group-hover:block focus:outline-none"
-                      >
-                        <Play size={14} className="ml-0.5" />
-                      </button>
+                      {canPlay ? (
+                        <button 
+                          onClick={() => handlePlayToggle(track.id)}
+                          className="hidden group-hover:block focus:outline-none"
+                        >
+                          <Play size={14} className="ml-0.5" />
+                        </button>
+                      ) : (
+                        <span className="hidden group-hover:block text-xs text-player-subtext/50">
+                          <VolumeX size={14} />
+                        </span>
+                      )}
                     </>
                   )}
                 </div>
@@ -121,7 +133,10 @@ const TrackList = ({ album, standalone = false }: TrackListProps) => {
                   />
                 </div>
                 <div>
-                  <p className="font-medium truncate">{track.title}</p>
+                  <p className="font-medium truncate">
+                    {track.title}
+                    {!canPlay && <span className="text-xs ml-2 text-player-subtext/50">(No preview)</span>}
+                  </p>
                   <p className="text-player-subtext text-sm truncate">{track.artist}</p>
                 </div>
               </div>
@@ -144,43 +159,58 @@ const TrackList = ({ album, standalone = false }: TrackListProps) => {
                   {formatTime(track.duration)}
                 </span>
                 
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button 
-                      className="opacity-0 group-hover:opacity-100 focus:opacity-100 text-player-subtext hover:text-white transition-colors"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <MoreHorizontal size={16} />
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="bg-player-card border-gray-700 text-player-text">
-                    <DropdownMenuItem 
-                      className="cursor-pointer focus:text-player-highlight focus:bg-white/5"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const track = tracks[index];
-                        if (track) play(track);
-                      }}
-                    >
-                      Play
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      className="cursor-pointer focus:text-player-highlight focus:bg-white/5"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        const track = tracks[index];
-                        if (track) addToQueue(track);
-                      }}
-                    >
-                      <Plus size={14} className="mr-1.5" />
-                      Add to Queue
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                {canPlay && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button 
+                        className="opacity-0 group-hover:opacity-100 focus:opacity-100 text-player-subtext hover:text-white transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <MoreHorizontal size={16} />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="bg-player-card border-gray-700 text-player-text">
+                      <DropdownMenuItem 
+                        className="cursor-pointer focus:text-player-highlight focus:bg-white/5"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const track = tracks[index];
+                          if (track && track.previewUrl) play(track);
+                        }}
+                      >
+                        Play Preview
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        className="cursor-pointer focus:text-player-highlight focus:bg-white/5"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const track = tracks[index];
+                          if (track && track.previewUrl) addToQueue(track);
+                        }}
+                      >
+                        <Plus size={14} className="mr-1.5" />
+                        Add to Queue
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </div>
             </div>
           );
         })}
+      </div>
+      
+      {tracks.length === 0 && (
+        <div className="py-8 text-center text-player-subtext">
+          No tracks available
+        </div>
+      )}
+      
+      <div className="mt-4 text-sm text-player-subtext/70 text-center">
+        <p>
+          <Volume2 size={14} className="inline-block mr-1 mb-0.5" /> 
+          Only 30-second previews are available through the Spotify API.
+        </p>
       </div>
     </div>
   );
