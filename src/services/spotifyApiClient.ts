@@ -11,11 +11,11 @@ let accessToken: string | null = localStorage.getItem('spotify_access_token');
 let tokenExpiry: number = parseInt(localStorage.getItem('spotify_token_expiry') || '0');
 
 // Initialize with your credentials
-const CLIENT_ID = "1ecdca01c02042fe8b39ac5be6174305";
-const CLIENT_SECRET = "1653d1ba49624494ba56b370dcf0a089";
+const CLIENT_ID = "";
+const CLIENT_SECRET = "";
 
 // Use the provided token
-const API_TOKEN = "BQD6Efa6-_k2o1l8dmLYGNvqwUqbWLSmgnrKZbLU_V98Pyyt8YqywsyQpLIAiBn6ZtPiCoH1NyoZzd70gHalUNXR1whDm73CqW2N8NzA4SFM-yz6xdtAXbkon8md7XPXWXzFQMYfLGijwoCOqOn9ifIYxfDriHGSBg_w8c7ZbHWgfU-6iKgcA6o-gYPqLozhXcZh9dBP-4vOghJDAgyZodSdi5F0XykqlI0cwitJLs2D6bEZhGN6nf3jVmq9fh58KLDmrUwWXkdmbdEzu9Drm8M6kFWoH05-xcoFWnt2avuUxRnsHWf3Kys7166w";
+const API_TOKEN = "";
 
 // Set initial token
 if (API_TOKEN && !accessToken) {
